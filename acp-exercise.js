@@ -1,7 +1,7 @@
 /* ACP Music Lab shared exercise engine v1 — teacher-supervised, no accounts. */
 (function(root){'use strict';
 const NOTE_Y=Object.freeze({C:140,D:130,E:120,F:110,G:100});
-const QUAVER='<svg viewBox="0 0 100 125" width="27" height="35" aria-hidden="true"><ellipse cx="39" cy="91" rx="18" ry="13" transform="rotate(-20 39 91)" fill="currentColor"/><path d="M55 87 L55 25" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M55 25 C55 42 83 47 83 67 C83 76 80 81 77 84 C82 65 70 58 55 50 Z" fill="currentColor"/></svg>';
+const EIGHTH_NOTE='<svg viewBox="0 0 100 125" width="27" height="35" aria-hidden="true"><ellipse cx="39" cy="91" rx="18" ry="13" transform="rotate(-20 39 91)" fill="currentColor"/><path d="M55 87 L55 25" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M55 25 C55 42 83 47 83 67 C83 76 80 81 77 84 C82 65 70 58 55 50 Z" fill="currentColor"/></svg>';
 function shuffle(items,random=Math.random){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function balanced(notes,count){if(!Array.isArray(notes)||!notes.length||!Number.isInteger(count)||count<1)throw Error('Invalid notes/count');const out=[];for(let i=0;i<count;i++)out.push(notes[i%notes.length]);return shuffle(out)}
 function drawNote(parts,n){const y=NOTE_Y[n];if(y===undefined)throw Error('Unsupported note '+n);parts.head.setAttribute('cy',y);parts.head.setAttribute('transform','rotate(-20 168 '+y+')');parts.stem.setAttribute('y1',y-3);parts.stem.setAttribute('y2',y-53);if(parts.ledger)parts.ledger.style.display=n==='C'?'':'none'}
@@ -14,7 +14,7 @@ function addNoteParts(board){
   const head=stem.previousElementSibling;
   return {head,stem,ledger:head.previousElementSibling};
 }
-function paintRewards(container,score,count){container.innerHTML=Array.from({length:count},(_,i)=>'<span aria-hidden="true" style="color:'+(i<score?'#DAA520':'#D6D9E5')+';opacity:1;display:inline-flex">'+QUAVER+'</span>').join('');container.setAttribute('aria-label',score+' of '+count+' golden quavers earned')}
+function paintRewards(container,score,count){container.innerHTML=Array.from({length:count},(_,i)=>'<span aria-hidden="true" style="color:'+(i<score?'#DAA520':'#D6D9E5')+';opacity:1;display:inline-flex">'+EIGHTH_NOTE+'</span>').join('');container.setAttribute('aria-label',score+' of '+count+' golden eighth notes earned')}
 function createNoteGame(options){
 const {board,buttons,parts,rewards,feedback,scoreLabel,targetLabel,finished,replay,sequenceForLength,getLength}=options;
 if(!board||!buttons?.length||!parts||!rewards||!feedback||!sequenceForLength||!getLength)throw Error('Missing exercise elements');
