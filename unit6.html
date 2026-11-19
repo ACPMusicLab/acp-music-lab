@@ -132,4 +132,14 @@ function closeFocus(){if(!focusCard)return;focusHolder.replaceWith(focusCard);fo
 document.querySelectorAll('[data-focus]').forEach(b=>{b.onclick=()=>{const card=$(b.dataset.focus);if(focusCard===card){closeFocus();return}if(focusCard)closeFocus();focusScroll=window.scrollY;focusHolder=document.createComment('focus placeholder');card.parentNode.insertBefore(focusHolder,card);document.body.append(card);card.classList.add('in-focus');document.body.classList.add('focus-open');card.scrollTop=0;focusCard=card}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFocus()});
 })();
+</script><script id="engraved-clef-unit6">
+(()=>{'use strict';const ns='http://www.w3.org/2000/svg';
+function add(svg,small){if(!svg||svg.querySelector('.acp-music-clef'))return;
+const image=document.createElementNS(ns,'image');image.setAttribute('class','acp-music-clef');
+image.setAttribute('href','treble-clef-engraved.svg');image.setAttribute('x',small?'0':'12');
+image.setAttribute('y','4');image.setAttribute('width',small?'37':'65');
+image.setAttribute('height','155');image.setAttribute('preserveAspectRatio','xMidYMid meet');svg.append(image)}
+add(document.getElementById('reading-staff'),false);
+document.querySelectorAll('#reference-notes svg').forEach(svg=>add(svg,true));
+})();
 </script></body></html>
