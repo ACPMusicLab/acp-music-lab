@@ -50,4 +50,22 @@ function setFocusMode(on){
 button.addEventListener('click',()=>setFocusMode(!card.classList.contains('clef-focus-active')));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&card.classList.contains('clef-focus-active'))setFocusMode(false)});
 })();
+</script><script id="acp-star-tracker">
+(()=>{'use strict';
+const page="unit2.html",limit=2,storageKey='acp-stars-v1';
+function currentStars(){return Number(document.getElementById('stars')?.textContent||0)}
+function updateStars(){
+ const earned=Math.min(limit,Math.max(0,currentStars()||0));
+ let progress={};
+ try{progress=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){}
+ if(earned>(Number(progress[page])||0)){
+  progress[page]=earned;
+  try{localStorage.setItem(storageKey,JSON.stringify(progress))}catch(e){}
+ }
+}
+let pending=false;
+const observer=new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;updateStars()})});
+observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+updateStars();
+})();
 </script></body></html>
