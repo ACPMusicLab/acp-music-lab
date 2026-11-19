@@ -42,4 +42,8 @@ document.querySelectorAll('[id^="star"]').forEach(el=>{if(!/^star\d+$/.test(el.i
 }
 let pending=false;const obs=new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;updateRewards();const finished=document.querySelectorAll('.finished:not(.hidden),.done:not(.hidden),.complete:not(.hidden)');if(finished.length){saved.completed=saved.completed||{};saved.completed[key]=true;try{localStorage.setItem(current,JSON.stringify(saved))}catch(e){}}})});obs.observe(document.body,{subtree:true,childList:true,characterData:true});updateRewards();
 })();
+</script><script id="trial-engraved-clefs">
+(()=>{'use strict';const targets=['.note-reference-grid svg','#gameHead'];const ns='http://www.w3.org/2000/svg';
+for(const target of targets){for(const el of document.querySelectorAll(target)){const svg=el.tagName.toLowerCase()==='svg'?el:el.closest('svg');if(!svg||svg.querySelector('.acp-music-clef'))continue;const image=document.createElementNS(ns,'image');image.setAttribute('class','acp-music-clef');image.setAttribute('href','treble-clef-engraved.svg');image.setAttribute('x','12');image.setAttribute('y','4');image.setAttribute('width','65');image.setAttribute('height','159');image.style.pointerEvents='none';svg.append(image)}}
+})();
 </script></body></html>
