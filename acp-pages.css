@@ -38,3 +38,44 @@ body.acp-screen-layout .acp-recap.acp-screen-active{display:flex!important;flex-
 @media(max-width:820px){body.acp-screen-layout .acp-pagebar{gap:7px;flex-wrap:wrap;justify-content:center}body.acp-screen-layout .acp-pagebar .acp-progress-track{display:none}body.acp-screen-layout main .card.acp-screen-active{padding:15px!important;min-height:calc(100dvh - 174px)}body.acp-screen-layout .acp-pagebar .acp-step-picker{max-width:250px}body.acp-screen-layout main .card.acp-screen-active .board svg{max-height:35dvh!important}}
 @media(max-width:500px){body.acp-screen-layout .acp-pagebar .acp-home{display:none}body.acp-screen-layout .acp-pagebar .acp-step-label{width:100%;order:-1}body.acp-screen-layout .acp-pagebar a,body.acp-screen-layout .acp-pagebar button,body.acp-screen-layout .acp-pagebar select{padding:8px 10px;font-size:13px}body.acp-screen-layout main .card.acp-screen-active .board svg,body.acp-screen-layout main .card.acp-screen-active svg.staff{max-height:30dvh!important}body.acp-screen-layout main .card.acp-screen-active .drawing svg{max-height:52dvh!important}}
 @media(max-height:650px){body.acp-screen-layout main .card.acp-screen-active{min-height:0}body.acp-screen-layout main .card.acp-screen-active .drawing svg{max-height:45dvh!important}}
+
+/* Keep the lavender sidebar visible on every activity screen. */
+body.acp-screen-layout main.layout,body.acp-screen-layout main.wrap{
+ display:grid!important;
+ grid-template-columns:minmax(205px,27%) minmax(0,1fr)!important;
+ align-items:start!important;
+ gap:18px!important;
+ max-width:1450px!important;
+}
+body.acp-screen-layout main .intro{
+ display:flex!important;
+ flex-direction:column!important;
+ gap:14px!important;
+ min-height:calc(100dvh - 180px)!important;
+ position:sticky!important;
+ top:12px!important;
+ padding:22px!important;
+}
+body.acp-screen-layout main .intro .fox{display:block!important}
+body.acp-screen-layout main .intro .acp-mascot{width:min(100%,190px)!important;max-height:205px!important}
+body.acp-screen-layout main .activities{min-width:0!important}
+body.acp-screen-layout main .card.acp-screen-active{min-height:calc(100dvh - 180px)!important}
+body.acp-screen-layout .acp-recap.acp-screen-active{grid-column:2}
+.acp-child-directions{background:#f1f2ff;border:1px solid #dfe3f4;border-radius:16px;padding:13px 18px;margin:16px 0 12px;font-size:clamp(16px,1.75vw,21px);font-weight:750;color:#4b588f;line-height:1.5}
+.acp-child-directions .acp-direction-number{display:inline-grid;place-items:center;width:29px;height:29px;background:#5965b1;color:white;border-radius:50%;font-size:15px;margin-right:9px}
+@media(max-width:850px){
+ body.acp-screen-layout main.layout,body.acp-screen-layout main.wrap{grid-template-columns:minmax(160px,29%) minmax(0,1fr)!important;gap:10px!important;padding:0 10px!important}
+ body.acp-screen-layout main .intro{padding:14px!important;min-height:calc(100dvh - 180px)!important}
+ body.acp-screen-layout main .intro h1{font-size:clamp(20px,3vw,28px)!important}
+ body.acp-screen-layout main .intro p{font-size:14px!important}
+ body.acp-screen-layout main .intro .acp-mascot{max-width:120px!important}
+}
+@media(max-width:550px){
+ body.acp-screen-layout main.layout,body.acp-screen-layout main.wrap{grid-template-columns:112px minmax(0,1fr)!important;gap:7px!important;padding:0 6px!important}
+ body.acp-screen-layout main .intro{padding:9px!important;min-height:calc(100dvh - 155px)!important}
+ body.acp-screen-layout main .intro h1{font-size:18px!important;letter-spacing:0!important}
+ body.acp-screen-layout main .intro p{display:none!important}
+ body.acp-screen-layout main .intro .acp-mascot{max-width:92px!important}
+ body.acp-screen-layout main .card.acp-screen-active{padding:10px!important}
+ .acp-child-directions{padding:9px;font-size:15px}
+}
