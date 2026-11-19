@@ -6,7 +6,7 @@
 <article class="card"><div class="heading"><span class="num">3</span><div><h2>Find the note</h2><p>Find 10 randomised notes. Tap any letter to hear its piano sound, even when it is not the answer.</p></div><span id="star3" class="star">☆</span></div><svg id="find-svg" class="staff" viewBox="0 0 330 175"></svg><div id="find-buttons" class="choices"></div><div id="find-rewards" class="review-quavers"></div><p id="find-msg" class="msg" aria-live="polite">Golden quavers: 0 / 10</p><button id="find-again" class="outline hidden" type="button">↻ Try again — 10 new notes</button></article>
 <article class="card"><div class="heading"><span class="num">4</span><div><h2>Put the notes in order</h2><p>Tap the letters from lowest to highest.</p></div><span id="star4" class="star">☆</span></div><div id="order-tiles" class="order"></div><div id="order-result" style="background:#f1f3ff;border-radius:13px;padding:12px;text-align:center;font-size:21px;letter-spacing:5px;font-weight:800">_ _ _ _ _</div><p id="order-msg" class="msg">Start with the lowest note.</p><button id="order-again" class="outline hidden" type="button">↻ Try again</button></article>
 <article class="card"><div class="heading"><span class="num">5</span><div><h2>The mixed challenge</h2><p>A little bit of everything! Find the missing note.</p></div><span id="star5" class="star">☆</span></div><div class="mini"><p id="mixed-question" style="text-align:center;font-weight:750">Which note comes after E?</p><div id="mixed-buttons" class="choices"></div><p id="mixed-msg" class="msg">0 / 3 challenges</p><button id="mixed-again" class="outline hidden" type="button">↻ Try again</button></div></article><div class="finish" id="finish">⭐ Collect five stars to complete Review 1!</div><div style="text-align:right;margin-top:15px"><button id="reset" class="outline">Restart review ↻</button></div></section></main>
-<script>
+<script src="acp-exercise.js?v=2"></script><script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id),wins=[false,false,false,false,false],ns='http://www.w3.org/2000/svg';
 const quaver='<svg viewBox="0 0 100 125" width="27" height="35" aria-hidden="true"><ellipse cx="39" cy="91" rx="18" ry="13" transform="rotate(-20 39 91)" fill="currentColor"/><path d="M55 87 L55 25" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M55 25 C55 42 83 47 83 67 C83 76 80 81 77 84 C82 65 70 58 55 50 Z" fill="currentColor"/></svg>';
@@ -16,7 +16,7 @@ function unwin(n){wins[n-1]=false;$('star'+n).textContent='☆';updateTotal()}
 function updateTotal(){const t=wins.filter(Boolean).length;$('total').textContent=t;$('finish').textContent=t===5?'Fantastic! You completed Review 1 — five golden stars!':t+' of 5 golden stars collected!'}
 function el(tag,attrs,parent,txt){const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));if(txt!==undefined)e.textContent=txt;parent.append(e);return e}
 function staff(svg){[40,60,80,100,120].forEach(y=>el('line',{x1:22,x2:308,y1:y,y2:y,stroke:'#7e8ca5','stroke-width':1.6},svg))}
-function note(svg,n){const y={C:140,D:130,E:120,F:110,G:100}[n];if(n==='C')el('line',{x1:151,x2:185,y1:140,y2:140,stroke:'#444568','stroke-width':2},svg);el('ellipse',{cx:168,cy:y,rx:13,ry:10.5,fill:'#444568',transform:'rotate(-20 168 '+y+')'},svg);el('line',{x1:179,x2:179,y1:y-3,y2:y-53,stroke:'#444568','stroke-width':2.8},svg)}
+
 function shuffle(items){const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 let mode='lines',selected=null;const numbered={lines:new Set(),spaces:new Set()};
 function numberRender(){const svg=$('number-svg');svg.replaceChildren();for(let i=0;i<5;i++)el('line',{x1:100,x2:335,y1:170-i*30,y2:170-i*30,stroke:'#5a6780','stroke-width':2},svg);const max=mode==='lines'?5:4;for(let i=1;i<=max;i++){const y=mode==='lines'?170-(i-1)*30:155-(i-1)*30,done=numbered[mode].has(i);const circle=el('circle',{cx:65,cy:y,r:19,fill:done?'#3478f6':'white',stroke:'#a7bce8','stroke-width':2},svg);el('text',{x:65,y:y+6,'text-anchor':'middle','font-size':19,'font-weight':800,fill:done?'white':'#3478f6','pointer-events':'none'},svg,done?String(i):'?');circle.style.cursor='pointer';circle.onclick=()=>place(i,selected)}
@@ -38,10 +38,30 @@ clef.addEventListener('pointermove',e=>{if(!drawing)return;pts.push(coord(e));re
 $('clef-clear').onclick=()=>{clearClef();$('clef-msg').textContent='Try again. Clearing does not award a quaver.'};
 $('clef-check').onclick=()=>{if(wins[1]||clefMode==='watch')return;if(pts.length<3){$('clef-msg').textContent='Draw your clef first, then ask your teacher to accept it.';return}clefs++;clearClef();reward('clef-rewards',clefs,3);if(clefs===3){win(2);$('clef-msg').textContent='Three golden quavers — one golden star!';$('clef-again').classList.remove('hidden')}else $('clef-msg').textContent='Accepted by your teacher! '+clefs+' of 3 golden quavers. Draw another clef.'};
 $('clef-again').onclick=()=>{unwin(2);clefs=0;startDrawing(false);reward('clef-rewards',0,3);$('clef-again').classList.add('hidden');$('clef-msg').textContent='Trace your first G clef.'};reward('clef-rewards',0,3);
-let findSeq=[],fi=0,findLocked=false,findRun=0,findTimer=null;
-function findRender(){const svg=$('find-svg');svg.replaceChildren();staff(svg);note(svg,findSeq[Math.min(fi,9)]);const box=$('find-buttons');box.replaceChildren();for(const n of ['C','D','E','F','G']){const b=document.createElement('button');b.className='tile';b.textContent=n;b.disabled=findLocked||fi>=10;b.onclick=()=>{if(findLocked||fi>=10)return;if(n===findSeq[fi]){findLocked=true;svg.classList.remove('note-wrong');svg.classList.add('note-correct');$('find-msg').textContent='Correct! That is '+n+'.';box.querySelectorAll('button').forEach(x=>x.disabled=true);const ticket=findRun;setTimeout(()=>{if(ticket!==findRun)return;svg.classList.remove('note-correct');fi++;findLocked=false;reward('find-rewards',fi,10);if(fi===10){win(3);$('find-msg').textContent='Ten golden quavers — one golden star!';$('find-again').classList.remove('hidden');box.replaceChildren()}else{findRender();$('find-msg').textContent='Golden quavers: '+fi+' / 10'}},650)}else{svg.classList.remove('note-correct');svg.classList.add('note-wrong');$('find-msg').textContent='Try another note!';clearTimeout(findTimer);findTimer=setTimeout(()=>svg.classList.remove('note-wrong'),350)}};box.append(b)}}
-function resetFind(){findRun++;clearTimeout(findTimer);findSeq=shuffle(['C','C','D','D','E','E','F','F','G','G']);fi=0;findLocked=false;unwin(3);$('find-again').classList.add('hidden');$('find-msg').textContent='Golden quavers: 0 / 10';reward('find-rewards',0,10);findRender()}
-$('find-again').onclick=resetFind;resetFind();
+const findBoard=$('find-svg');
+staff(findBoard);
+const findChoices=$('find-buttons');
+const findNotes=['C','D','E','F','G'];
+const findButtons=findNotes.map(note=>{
+  const button=document.createElement('button');
+  button.type='button';
+  button.className='tile';
+  button.textContent=button.dataset.note=note;
+  findChoices.append(button);
+  return button;
+});
+ACPExercise.createNoteGame({
+  board:findBoard,parts:ACPExercise.addNoteParts(findBoard),buttons:findButtons,
+  rewards:$('find-rewards'),feedback:$('find-msg'),replay:$('find-again'),
+  getLength:()=>10,sequenceForLength:n=>ACPExercise.balanced(findNotes,n),
+  prompt:(score,length)=>'Golden quavers: '+score+' / '+length,
+  completionMessage:'Ten golden quavers — one golden star!',
+  onChange({done,score}){
+    findButtons.forEach(button=>button.hidden=done);
+    if(done)win(3);
+    else if(score===0 && wins[2])unwin(3);
+  }
+});
 let order=[],orderSeq=[];
 function orderRender(){const box=$('order-tiles');box.replaceChildren();orderSeq.forEach(n=>{const b=document.createElement('button');b.className='tile';b.textContent=n;b.disabled=order.includes(n)||wins[3];b.onclick=()=>{if(n!=='CDEFG'[order.length]){$('order-msg').textContent='Try another note! Start from C.';return}order.push(n);orderRender();if(order.length===5){win(4);$('order-msg').textContent='One golden star! All five notes are in order.';$('order-again').classList.remove('hidden')}else $('order-msg').textContent='Well done! Keep going.'};box.append(b)});$('order-result').textContent=order.join(' ')+'  '+Array(5-order.length).fill('_').join(' ')}
 function resetOrder(){order=[];orderSeq=shuffle(['C','D','E','F','G']);unwin(4);$('order-again').classList.add('hidden');$('order-msg').textContent='Start with the lowest note.';orderRender()}
