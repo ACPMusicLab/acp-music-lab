@@ -43,4 +43,22 @@ document.querySelectorAll('[id^="star"]').forEach(el=>{if(!/^star\d+$/.test(el.i
 }
 let pending=false;const obs=new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;updateRewards();const finished=document.querySelectorAll('.finished:not(.hidden),.done:not(.hidden),.complete:not(.hidden)');if(finished.length){saved.completed=saved.completed||{};saved.completed[key]=true;try{localStorage.setItem(current,JSON.stringify(saved))}catch(e){}}})});obs.observe(document.body,{subtree:true,childList:true,characterData:true});updateRewards();
 })();
+</script><script id="acp-star-tracker">
+(()=>{'use strict';
+const page="unit3.html",limit=1,storageKey='acp-stars-v1';
+function currentStars(){return document.getElementById('finished')?.classList.contains('hidden')?0:1}
+function updateStars(){
+ const earned=Math.min(limit,Math.max(0,currentStars()||0));
+ let progress={};
+ try{progress=JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(e){}
+ if(earned>(Number(progress[page])||0)){
+  progress[page]=earned;
+  try{localStorage.setItem(storageKey,JSON.stringify(progress))}catch(e){}
+ }
+}
+let pending=false;
+const observer=new MutationObserver(()=>{if(pending)return;pending=true;queueMicrotask(()=>{pending=false;updateStars()})});
+observer.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+updateStars();
+})();
 </script></body></html>
