@@ -35,7 +35,7 @@ function show(n,updateURL=true){
  label.textContent=pages[page]+' · '+n+' / '+total;
  picker.value=String(n);track.style.width=(n/total*100)+'%';
  prev.textContent=n===1?'← Home':'← Previous';
- next.textContent=n===total?(hasRecap?'Continue to Unit 6 →':'Finish activity →'):'Next →';
+ const nextPage={'unit1.html':'Unit 2','unit2.html':'Unit 3','unit3.html':'Unit 4','unit4.html':'Unit 5','unit5.html':'Review 1'};next.textContent=n===total?(hasRecap?'Continue to Unit 6 →':'Continue to '+(nextPage[page]||'next unit')+' →'):'Next →';
  if(updateURL){const url=new URL(location.href);url.searchParams.set('step',String(n));history.pushState({step:n},'',url)}
  window.scrollTo(0,0);
 }
